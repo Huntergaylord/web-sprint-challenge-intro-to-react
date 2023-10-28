@@ -15,18 +15,13 @@ function App() {
   // Create effects to fetch the data and put it in state
   useEffect(() => {
     // Fetch character data
-    axios.get(urlPeople)
-      .then((response) => {
-        setCharacters(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching character data:', error);
-      });
-
-    // Fetch planet data
-    axios.get(urlPlanets)
-      .then((response) => {
-        setPlanets(response.data);
+    Promise.all([
+      axios.get(urlPeople),
+      axios.get(urlPlanets)
+    ])
+      .then(([peopleResponse, planetsResponse]) => {
+        setCharacters(peopleResponse.data);
+        setPlanets(planetsResponse.data);
       })
       .catch((error) => {
         console.error('Error fetching planet data:', error);
